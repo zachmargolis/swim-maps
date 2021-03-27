@@ -20,7 +20,6 @@ maps: maps/sfshore.json \
 			maps/belvedere.json \
 			maps/coast_potomac.json \
 			maps/coast_catalina.json \
-			maps/cibb.json \
 			maps/ny_shoreline.json \
 			maps/gibraltar.json \
 			maps/goga_tracts.json \
@@ -163,21 +162,6 @@ _maps/coast/coast_nyc_geojson.json: _maps/coast/coast.json
 # geo2topo
 _maps/coast_nyc.json: _maps/coast/coast_nyc_geojson.json | $(geo2topo)
 	$(geo2topo) --out $@ -- coast_nyc=$<
-
-# NY publicly accessible waterfront spaces (PAWS)
-# https://www1.nyc.gov/site/planning/data-maps/open-_maps/dwn-waterfront.page
-_maps/nypaws/nypaws.json:
-	mkdir -p `dirname $@`
-	#	curl "http://services5.arcgis.com/GfwWNkhOj9bNBqoJ/arcgis/rest/services/nywp/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson" > _maps/nypaws/nypaws.json
-	curl "https://data.cityofnewyork.us/api/geospatial/388s-pnvc?method=export&format=GeoJSON" > $@
-
-# Just Coney Island / Brighton Beach Boardwalk
-_maps/nypaws/cibb_geojson.json: _maps/nypaws/nypaws.json # TODO fix
-	./scripts/geojson-select OBJECTID=82 < $< > $@
-
-# geo2topo
-_maps/cibb.json: _maps/nypaws/cibb_geojson.json |$(geo2topo)
-	$(geo2topo) --out $@ -- cibb=$<
 
 # NYC shoreline
 # https://data.cityofnewyork.us/Recreation/Shoreline/2qj2-cctx/data
