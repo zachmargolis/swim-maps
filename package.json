@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "shapefile": "^0.6.6",
+    "topojson": "^3.0.2"
+  }
+}

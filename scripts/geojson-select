@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+
+const path = require('path');
+const fs = require('fs');
+
+if (process.stdin.isTTY) {
+  console.log(`Usage: cat JSON | ${path.basename(__filename)} prop1=value1`);
+  process.exit(1);
+}
+
+const content = fs.readFileSync(process.stdin.fd).toString();
+const json = JSON.parse(content);
+
+const properties = process.argv.slice(1).map((arg) => arg.split('=', 2));
+
+json.features = json.features.filter((feature) =>
+  properties.some(([key, val]) =>
+    String(feature.properties[key]) == val));
+
+console.log(JSON.stringify(json));
